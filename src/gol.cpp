@@ -158,5 +158,8 @@ int main()
     SDL_DestroyWindow(window);
     SDL_Quit();
 #endif // __EMSCRIPTEN__
+
+    // prevent error compiling for Windows
+    return 0;
 }
 
