@@ -35,15 +35,15 @@ const int CELL_SIZE = 3;
 const int ROWS = WINDOW_HEIGHT / CELL_SIZE;
 const int COLS = WINDOW_WIDTH / CELL_SIZE;
 
-int **grid;
-int **new_grid;
+uint8_t **grid;
+uint8_t **new_grid;
 
 void initialize_grid()
-{   grid = new int*[ROWS];
-    new_grid = new int*[ROWS];
+{   grid = new uint8_t*[ROWS];
+    new_grid = new uint8_t*[ROWS];
     for (int i = 0; i < ROWS; ++i)
-    {   grid[i] = new int[COLS];
-        new_grid[i] = new int[COLS];
+    {   grid[i] = new uint8_t[COLS];
+        new_grid[i] = new uint8_t[COLS];
         for (int j = 0; j < COLS; ++j)
             grid[i][j] = rand() % 2;
     }
