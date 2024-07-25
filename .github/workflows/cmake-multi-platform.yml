@@ -47,7 +47,8 @@ jobs:
       - name: Configure with CMake (macOS)
         run: |
           cmake -S ${{github.workspace}} -B build \
-          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+          -DVCPKG_TARGET_TRIPLET=x64-osx -DVCPKG_MANIFEST_MODE=OFF
         if: matrix.os == 'macos-latest'
 
       - name: Configure with CMake (Windows)
