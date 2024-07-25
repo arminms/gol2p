@@ -22,9 +22,8 @@ jobs:
         actions-cache-folder: 'emsdk-cache'
 
     - name: Build
-      run: mkdir -p public
-           em++ src/gol.cpp -o public/index.html --shell-file src/template.html \
-           --use-port=sdl2 -s ALLOW_MEMORY_GROWTH
+      run: mkdir -p public && em++ src/gol.cpp -o public/index.html \
+           --shell-file src/template.html --use-port=sdl2 -s ALLOW_MEMORY_GROWTH
 
     # push the generated content into the `gh-pages` branch.
     - name: Deploy
