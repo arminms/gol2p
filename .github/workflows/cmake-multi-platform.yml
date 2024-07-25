@@ -31,14 +31,27 @@ jobs:
           export VCPKG_ROOT="$HOME/vcpkg"
         if: matrix.os == 'macos-latest'
 
-      - name: Install SDL2 via vcpkg
+      - name: Install SDL2 via vcpkg (macOS)
         run: vcpkg install sdl2 --binarysource="clear;x-gha,readwrite"
+        env:
+          VCPKG_ROOT: $HOME/vcpkg
+        if: matrix.os == 'macos-latest'
 
-      - name: Configure with CMake (Linux and macOS)
+      - name: Install SDL2 via vcpkg (Linux and Windows)
+        run: vcpkg install sdl2 --binarysource="clear;x-gha,readwrite"
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest'
+
+      - name: Configure with CMake (Linux)
         run: |
           cmake -S ${{github.workspace}} -B build \
           -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Configure with CMake (macOS)
+        run: |
+          cmake -S ${{github.workspace}} -B build \
+          -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake
+        if: matrix.os == 'macos-latest'
 
       - name: Configure with CMake (Windows)
         run: |
