@@ -27,6 +27,8 @@ jobs:
       - name: Install vcpkg (macOS)
         run: |
           brew install vcpkg
+          git clone https://github.com/microsoft/vcpkg "$HOME/vcpkg"
+          export VCPKG_ROOT="$HOME/vcpkg"
         if: matrix.os == 'macos-latest'
 
       - name: Install SDL2 via vcpkg
