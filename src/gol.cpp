@@ -21,8 +21,6 @@
 //
 #include <iostream>
 #include <random>
-// #include <cstdlib>
-// #include <ctime>
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
@@ -129,11 +127,15 @@ int main(int argc, char* args[])
 
     initialize_grid();
 
-#ifdef __EMSCRIPTEN__
+    SDL_DisplayMode dm;
+    SDL_GetCurrentDisplayMode(0, &dm);
     std::cout << "John Conway's Game of Life v1.0\n"
               << "Copyright © 2024 Armin Sobhani\n"
-              << "Display size: " << WINDOW_WIDTH << "x" << WINDOW_HEIGHT
+              << "Display size: " << dm.w << "x" << dm.h << "\n"
+              << "Window size:  " << WINDOW_WIDTH << "x" << WINDOW_HEIGHT
               << std::endl;
+
+#ifdef __EMSCRIPTEN__
     emscripten_set_main_loop_arg(main_loop, renderer, -1, 1);
     // Cleanup would go here
     // but emscripten_set_main_loop never returns
