@@ -41,7 +41,7 @@ uint8_t **new_grid;
 void initialize_grid()
 {   std::random_device r;
     std::default_random_engine e(r());
-    std::uniform_int_distribution<uint8_t> uniform_dist(0, 1);
+    std::uniform_int_distribution<int> uniform_dist(0, 1);
     grid = new uint8_t*[ROWS];
     new_grid = new uint8_t*[ROWS];
     for (int i = 0; i < ROWS; ++i)
