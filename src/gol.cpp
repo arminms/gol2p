@@ -37,7 +37,6 @@ const int COLS = WINDOW_WIDTH / CELL_SIZE;
 
 int **grid;
 int **new_grid;
-SDL_Renderer *renderer;
 
 void initialize_grid()
 {   grid = new int*[ROWS];
@@ -78,7 +77,7 @@ void update_grid()
             grid[i][j] = new_grid[i][j];
 }
 
-void draw_grid()
+void draw_grid(SDL_Renderer* renderer)
 {   for (int i = 0; i < ROWS; ++i)
         for (int j = 0; j < COLS; ++j)
         {   SDL_Rect cell;
@@ -97,11 +96,12 @@ void draw_grid()
         }
 }
 
-void main_loop()
-{   update_grid();
+void main_loop(void* renderer_)
+{   SDL_Renderer *renderer = (SDL_Renderer*)renderer_;
+    update_grid();
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    draw_grid();
+    draw_grid(renderer);
     SDL_RenderPresent(renderer);
 }
 
@@ -115,18 +115,22 @@ int main()
     ,   SDL_WINDOWPOS_UNDEFINED
     ,   WINDOW_WIDTH
     ,   WINDOW_HEIGHT
-    , 0
+    ,   0
     );
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* renderer = SDL_CreateRenderer
+    (   window
+    ,   -1
+    ,   SDL_RENDERER_ACCELERATED
+    );
 
     initialize_grid();
 
 #ifdef __EMSCRIPTEN__
     std::cout << "John Conway's Game of Life v1.0\n"
               << "Copyright © 2024 Armin Sobhani\n"
-              << "Display size: " << WINDOW_WIDTH << "x" << WINDOW_HEIGHT << "\n"
+              << "Display size: " << WINDOW_WIDTH << "x" << WINDOW_HEIGHT
               << std::endl;
-    emscripten_set_main_loop(main_loop, -1, 1);
+    emscripten_set_main_loop_arg(main_loop, renderer, -1, 1);
     // Cleanup would go here
     // but emscripten_set_main_loop never returns
     // so it's omitted
@@ -138,7 +142,7 @@ int main()
     {   while (SDL_PollEvent(&e) != 0)
             if (e.type == SDL_QUIT)
                 quit = true;
-        main_loop();
+        main_loop(renderer);
     }
 
     // free memory
