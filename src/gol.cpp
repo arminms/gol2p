@@ -20,8 +20,9 @@
 // SOFTWARE.
 //
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <random>
+// #include <cstdlib>
+// #include <ctime>
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
@@ -40,13 +41,16 @@ uint8_t **grid;
 uint8_t **new_grid;
 
 void initialize_grid()
-{   grid = new uint8_t*[ROWS];
+{   std::random_device r;
+    std::default_random_engine e(r());
+    std::uniform_int_distribution<uint8_t> uniform_dist(0, 1);
+    grid = new uint8_t*[ROWS];
     new_grid = new uint8_t*[ROWS];
     for (int i = 0; i < ROWS; ++i)
     {   grid[i] = new uint8_t[COLS];
         new_grid[i] = new uint8_t[COLS];
         for (int j = 0; j < COLS; ++j)
-            grid[i][j] = rand() % 2;
+            grid[i][j] = uniform_dist(e);
     }
 }
 
@@ -106,12 +110,10 @@ void main_loop(void* renderer_)
     SDL_RenderPresent(renderer);
 }
 
-int main(int argc, char *args[])
+int main(int argc, char* args[])
 {   SDL_SetMainReady();
-    srand(time(NULL));
-
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window *window = SDL_CreateWindow
+    SDL_Window* window = SDL_CreateWindow
     (   "John Conway's Game of Life"
     ,   SDL_WINDOWPOS_UNDEFINED
     ,   SDL_WINDOWPOS_UNDEFINED
