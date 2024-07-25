@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <ctime>
 
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
 #ifdef __EMSCRIPTEN__
@@ -105,8 +106,9 @@ void main_loop(void* renderer_)
     SDL_RenderPresent(renderer);
 }
 
-int main()
-{   srand(time(NULL));
+int main(int argc, char *args[])
+{   SDL_SetMainReady();
+    srand(time(NULL));
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow
@@ -158,8 +160,5 @@ int main()
     SDL_DestroyWindow(window);
     SDL_Quit();
 #endif // __EMSCRIPTEN__
-
-    // prevent error compiling for Windows
-    return 0;
 }
 
