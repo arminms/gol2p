@@ -31,7 +31,7 @@ jobs:
           pkgs: sdl2
           triplet: x64-osx-release
           token: ${{ github.token }}
-          github-binarycache: true
+          github-binarycache: false
         if: matrix.os == 'macos-latest'
 
       - name: Install SDL2 via vcpkg (Linux and Windows)
