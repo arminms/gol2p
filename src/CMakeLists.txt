@@ -12,13 +12,13 @@ if(NOT SDL2_FOUND)
   FetchContent_MakeAvailable(SDL)
 endif()
 
-add_executable(gol gol.cpp)
+add_executable(gol2p gol.cpp)
 
 if(SDL2_VERSION VERSION_LESS "2.0.12")
-  target_include_directories(gol PRIVATE ${SDL2_INCLUDE_DIRS})
-  target_link_libraries(gol PRIVATE ${SDL2_LIBRARIES})
+  target_include_directories(gol2p PRIVATE ${SDL2_INCLUDE_DIRS})
+  target_link_libraries(gol2p PRIVATE ${SDL2_LIBRARIES})
 else()
-  target_link_libraries(gol PRIVATE
+  target_link_libraries(gol2p PRIVATE
     $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
   )
