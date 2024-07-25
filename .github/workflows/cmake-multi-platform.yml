@@ -24,17 +24,14 @@ jobs:
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Install vcpkg (macOS)
-        run: |
-          brew install vcpkg
-          git clone https://github.com/microsoft/vcpkg "$HOME/vcpkg"
-          export VCPKG_ROOT="$HOME/vcpkg"
-        if: matrix.os == 'macos-latest'
-
       - name: Install SDL2 via vcpkg (macOS)
-        run: vcpkg install sdl2 --binarysource="clear;x-gha,readwrite"
-        env:
-          VCPKG_ROOT: $HOME/vcpkg
+        uses: johnwason/vcpkg-action@v6
+        id: vcpkg
+        with:
+          pkgs: sdl2
+          triplet: x64-osx-release
+          token: ${{ github.token }}
+          github-binarycache: true
         if: matrix.os == 'macos-latest'
 
       - name: Install SDL2 via vcpkg (Linux and Windows)
@@ -50,14 +47,13 @@ jobs:
       - name: Configure with CMake (macOS)
         run: |
           cmake -S ${{github.workspace}} -B build \
-          -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
         if: matrix.os == 'macos-latest'
 
       - name: Configure with CMake (Windows)
         run: |
           cmake -S ${{github.workspace}} -B build -DCMAKE_TOOLCHAIN_FILE="$Env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
         if: matrix.os == 'windows-latest'
-
 
       - name: Build
         run: cmake --build build
