@@ -1,4 +1,4 @@
-add_executable(gol2p gol.cpp)
+add_executable(${PROJECT_NAME} gol.cpp)
 
 find_package(
   SDL2 CONFIG
@@ -6,11 +6,10 @@ find_package(
 )
 if(SDL2_FOUND)
   if(SDL2_VERSION VERSION_LESS "2.0.12")
-    target_include_directories(gol2p PRIVATE ${SDL2_INCLUDE_DIRS})
-    target_link_libraries(gol2p PRIVATE ${SDL2_LIBRARIES})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
   else()
-    target_link_libraries(gol2p PRIVATE
-      $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    target_link_libraries(${PROJECT_NAME} PRIVATE
       $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
     )
   endif()
@@ -23,8 +22,8 @@ else()
     GIT_TAG        release-2.30.5
   )
   FetchContent_MakeAvailable(SDL)
-  target_link_libraries(gol2p PRIVATE
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
-  )
+  target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2-static)
 endif()
+
+include(GNUInstallDirs)
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
