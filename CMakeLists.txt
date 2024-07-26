@@ -22,7 +22,7 @@
 cmake_minimum_required(VERSION 3.19...3.30)
 
 project(
-  gol
+  gol2p
   VERSION 1.0.0
   LANGUAGES CXX
   DESCRIPTION "John Conway's Game of Life for SDL2/Wasm"
