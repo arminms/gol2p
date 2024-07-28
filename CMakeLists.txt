@@ -21,6 +21,10 @@
 #
 cmake_minimum_required(VERSION 3.19...3.30)
 
+## Set default build type to Release if none was specified
+#
+include(cmake/BuildType.cmake)
+
 project(
   gol2p
   VERSION 1.1.0
