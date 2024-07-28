@@ -71,9 +71,9 @@ if(NOT SDL2_ttf_FOUND)
       GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
       GIT_TAG        release-2.22.0
     )
-    # set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build the library as a shared library")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build the library as a shared library")
     FetchContent_MakeAvailable(SDL_ttf)
-    list(APPEND SDL2_LIBS SDL2_ttf::SDL2_ttf)
+    list(APPEND SDL2_LIBS SDL2_ttf::SDL2_ttf-static)
   endif()
 else()
   list(APPEND SDL2_LIBS $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
