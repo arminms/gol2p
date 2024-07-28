@@ -28,7 +28,7 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: sdl2
+          pkgs: sdl2 sdl2-ttf
           triplet: ${{ matrix.config.vcpkg_triplet }}
           cache-key: ${{ matrix.config.os }}
           revision: master
