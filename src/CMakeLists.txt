@@ -29,15 +29,15 @@ set(SDL2_LIBS gol2p::rc)
 
 add_executable(${PROJECT_NAME} gol.cpp)
 
-CHECK_LIBRARY_EXISTS(SDL2 SDL_Init "" SDL2_EXISTS)
-if(SDL2_EXISTS)
-  list(APPEND SDL2_LIBS SDL2)
-else()
-  find_package(
-    SDL2 CONFIG
-    HINTS $ENV{HOME} /usr/local /opt/local /opt
-  )
-  if(NOT SDL2_FOUND)
+find_package(
+  SDL2 CONFIG
+  HINTS $ENV{HOME} /usr/local /opt/local /opt
+)
+if(NOT SDL2_FOUND)
+  CHECK_LIBRARY_EXISTS(SDL2 SDL_Init "" SDL2_EXISTS)
+  if(SDL2_EXISTS)
+    list(APPEND SDL2_LIBS SDL2)
+  else()
     message(STATUS "Fetching SDL2 library...")
     FetchContent_Declare(
       SDL
@@ -49,15 +49,15 @@ else()
   endif()
 endif()
 
-CHECK_LIBRARY_EXISTS(SDL2_ttf TTF_Init "" SDL2_ttf_EXISTS)
-if(SDL2_ttf_EXISTS)
-  list(APPEND SDL2_LIBS SDL2_ttf)
-else()
-  find_package(
-    SDL2_ttf CONFIG
-    HINTS $ENV{HOME} /usr/local /opt/local /opt
-  )
-  if(NOT SDL2_ttf_FOUND)
+find_package(
+  SDL2_ttf CONFIG
+  HINTS $ENV{HOME} /usr/local /opt/local /opt
+)
+if(NOT SDL2_ttf_FOUND)
+  CHECK_LIBRARY_EXISTS(SDL2_ttf TTF_Init "" SDL2_ttf_EXISTS)
+  if(SDL2_ttf_EXISTS)
+    list(APPEND SDL2_LIBS SDL2_ttf)
+  else()
     message(STATUS "Fetching SDL2_ttf library...")
     FetchContent_Declare(
       SDL_ttf
