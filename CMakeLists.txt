@@ -23,9 +23,13 @@ cmake_minimum_required(VERSION 3.19...3.30)
 
 project(
   gol2p
-  VERSION 1.0.0
+  VERSION 1.1.0
   LANGUAGES CXX
   DESCRIPTION "John Conway's Game of Life for SDL2/Wasm"
 )
+
+include(FetchContent)
+include(cmake/CMakeRC.cmake)
+include(CheckLibraryExists)
 
 add_subdirectory(src)

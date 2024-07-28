@@ -30,6 +30,9 @@
 
 #ifdef __EMSCRIPTEN__
 #   include <emscripten.h>
+#else
+#   include <cmrc/cmrc.hpp>
+    CMRC_DECLARE(gol2p);
 #endif // __EMSCRIPTEN__
 
 const int WINDOW_WIDTH = 800;
@@ -132,7 +135,13 @@ struct rendering_context
 #ifdef __EMSCRIPTEN__
         font_ = TTF_OpenFont("src/font.ttf", 32);
 #else
-        font_ = TTF_OpenFont("/home/armin/src/gol2p/src/font.ttf", 32);
+        auto fs = cmrc::gol2p::get_filesystem();
+        auto font_data = fs.open("font.ttf");
+        font_ = TTF_OpenFontRW
+        (   SDL_RWFromConstMem(font_data.begin(), font_data.size())
+        ,   1
+        ,   32
+        );
 #endif // __EMSCRIPTEN__
         if (font_ == nullptr)
         {   std::cerr << "TTF_OpenFont Error: " << TTF_GetError() << std::endl;
