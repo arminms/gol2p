@@ -25,7 +25,7 @@ jobs:
       run: |
         mkdir -p public
         em++ src/gol.cpp -o public/index.html --shell-file src/template.html \
-        --use-port=sdl2 -s ALLOW_MEMORY_GROWTH
+        --preload-file src/font.ttf --use-port=sdl2 -s ALLOW_MEMORY_GROWTH
 
     # push the generated content into the `gh-pages` branch.
     - name: Deploy
