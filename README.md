@@ -15,7 +15,7 @@ cmake -S . -B build && cmake --build build && cmake --install build
 ### Browser (WebAssembly)
 You need [Emscripten](https://emscripten.org/):
 ```bash
-em++ src/gol.cpp -o index.html --shell-file src/template.html --use-port=sdl2 -s ALLOW_MEMORY_GROWTH
+em++ src/gol.cpp -o index.html --shell-file src/template.html --preload-file src/font.ttf --use-port=sdl2 --use-port=sdl2_ttf -s ALLOW_MEMORY_GROWTH
 ```
 And for running:
 ```bash
