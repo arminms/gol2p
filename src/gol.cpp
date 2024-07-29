@@ -119,8 +119,10 @@ struct rendering_context
     ,   grid_(nullptr)
     {   SDL_Init(SDL_INIT_VIDEO);
         TTF_Init();
+        std::string title = "John Conway's Game of Life - v1.1 - ";
+        title += SDL_GetPlatform();
         window_ = SDL_CreateWindow
-        (   "John Conway's Game of Life"
+        (   title.c_str()
         ,   SDL_WINDOWPOS_UNDEFINED
         ,   SDL_WINDOWPOS_UNDEFINED
         ,   width_
@@ -238,8 +240,7 @@ int main(int argc, char* args[])
 
     SDL_DisplayMode dm;
     SDL_GetCurrentDisplayMode(0, &dm);
-    std::cout << "John Conway's Game of Life v1.1\n"
-              << "Copyright © 2024 Armin Sobhani\n"
+    std::cout << "Copyright (C) 2024 Armin Sobhani\n"
               << "Display size: " << dm.w << "x" << dm.h << "\n"
               << "Window size:  " << WINDOW_WIDTH << "x" << WINDOW_HEIGHT
               << std::endl;
