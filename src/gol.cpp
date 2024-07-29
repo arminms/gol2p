@@ -35,11 +35,9 @@
     CMRC_DECLARE(gol2p);
 #endif // __EMSCRIPTEN__
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
-const int CELL_SIZE = 3;
-const int ROWS = WINDOW_HEIGHT / CELL_SIZE;
-const int COLS = WINDOW_WIDTH / CELL_SIZE;
+const size_t WINDOW_WIDTH = 800;
+const size_t WINDOW_HEIGHT = 600;
+const size_t CELL_SIZE = 3;
 
 struct cellular_automaton_grid
 {   cellular_automaton_grid(size_t rows, size_t cols)
