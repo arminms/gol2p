@@ -26,11 +26,12 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-#include <SDL_ttf.h>
 
 #ifdef __EMSCRIPTEN__
 #   include <emscripten.h>
+#   include <SDL2/SDL_ttf.h>
 #else
+#   include <SDL_ttf.h>
 #   include <cmrc/cmrc.hpp>
     CMRC_DECLARE(gol2p);
 #endif // __EMSCRIPTEN__
