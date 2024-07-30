@@ -19,67 +19,86 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-cmrc_add_resource_library(
-  gol2p-resources
-  ALIAS gol2p::rc
-  NAMESPACE gol2p
-  font.ttf
-  )
-set(SDL2_LIBS gol2p::rc)
-
 add_executable(${PROJECT_NAME} gol.cpp)
 
-find_package(
-  SDL2 CONFIG
-  HINTS $ENV{HOME} /usr/local /opt/local /opt
-)
-if(NOT SDL2_FOUND)
-  CHECK_LIBRARY_EXISTS(SDL2 SDL_Init "" SDL2_EXISTS)
-  if(SDL2_EXISTS)
-    list(APPEND SDL2_LIBS SDL2)
-  else()
-    message(STATUS "Fetching SDL2 library...")
-    FetchContent_Declare(
-      SDL
-      GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-      GIT_TAG        release-2.30.5
-    )
-    FetchContent_MakeAvailable(SDL)
-    list(APPEND SDL2_LIBS SDL2::SDL2-static)
-  endif()
+if (EMSCRIPTEN)
+  message(STATUS "Configuring for Emscripten")
+  set(SHELL_FILE template.html)
+  target_link_options(${PROJECT_NAME} PRIVATE
+    --use-port=sdl2
+    --use-port=sdl2_ttf
+    --preload-file "${CMAKE_CURRENT_SOURCE_DIR}/font.ttf@src/font.ttf"
+    --shell-file   "${CMAKE_CURRENT_SOURCE_DIR}/${SHELL_FILE}"
+    -s ALLOW_MEMORY_GROWTH
+  )
+  set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+  # make sure the shell file is watched for changes
+  set_property(
+    TARGET ${PROJECT_NAME}
+    PROPERTY LINK_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/${SHELL_FILE}"
+  )
 else()
-  if(SDL2_VERSION VERSION_LESS "2.0.12")
-    target_include_directories(gol2p PRIVATE ${SDL2_INCLUDE_DIRS})
-    target_link_libraries(gol2p PRIVATE ${SDL2_LIBRARIES})
-  else()
-    list(APPEND SDL2_LIBS $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>)
-  endif()
-endif()
-
-find_package(
-  SDL2_ttf CONFIG
-  HINTS $ENV{HOME} /usr/local /opt/local /opt
-)
-if(NOT SDL2_ttf_FOUND)
-  CHECK_LIBRARY_EXISTS(SDL2_ttf TTF_Init "" SDL2_ttf_EXISTS)
-  if(SDL2_ttf_EXISTS)
-    list(APPEND SDL2_LIBS SDL2_ttf)
-  else()
-    message(STATUS "Fetching SDL2_ttf library...")
-    FetchContent_Declare(
-      SDL_ttf
-      GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
-      GIT_TAG        release-2.22.0
+  cmrc_add_resource_library(
+    gol2p-resources
+    ALIAS gol2p::rc
+    NAMESPACE gol2p
+    font.ttf
     )
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build the library as a shared library")
-    FetchContent_MakeAvailable(SDL_ttf)
-    list(APPEND SDL2_LIBS SDL2_ttf::SDL2_ttf-static)
+  set(SDL2_LIBS gol2p::rc)
+
+  find_package(
+    SDL2 CONFIG
+    HINTS $ENV{HOME} /usr/local /opt/local /opt
+  )
+  if(NOT SDL2_FOUND)
+    CHECK_LIBRARY_EXISTS(SDL2 SDL_Init "" SDL2_EXISTS)
+    if(SDL2_EXISTS)
+      list(APPEND SDL2_LIBS SDL2)
+    else()
+      message(STATUS "Fetching SDL2 library...")
+      FetchContent_Declare(
+        SDL
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        GIT_TAG        release-2.30.5
+      )
+      FetchContent_MakeAvailable(SDL)
+      list(APPEND SDL2_LIBS SDL2::SDL2-static)
+    endif()
+  else()
+    if(SDL2_VERSION VERSION_LESS "2.0.12")
+      target_include_directories(gol2p PRIVATE ${SDL2_INCLUDE_DIRS})
+      target_link_libraries(gol2p PRIVATE ${SDL2_LIBRARIES})
+    else()
+      list(APPEND SDL2_LIBS $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>)
+    endif()
   endif()
-else()
-  list(APPEND SDL2_LIBS $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
+
+  find_package(
+    SDL2_ttf CONFIG
+    HINTS $ENV{HOME} /usr/local /opt/local /opt
+  )
+  if(NOT SDL2_ttf_FOUND)
+    CHECK_LIBRARY_EXISTS(SDL2_ttf TTF_Init "" SDL2_ttf_EXISTS)
+    if(SDL2_ttf_EXISTS)
+      list(APPEND SDL2_LIBS SDL2_ttf)
+    else()
+      message(STATUS "Fetching SDL2_ttf library...")
+      FetchContent_Declare(
+        SDL_ttf
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+        GIT_TAG        release-2.22.0
+      )
+      set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build the library as a shared library")
+      FetchContent_MakeAvailable(SDL_ttf)
+      list(APPEND SDL2_LIBS SDL2_ttf::SDL2_ttf-static)
+    endif()
+  else()
+    list(APPEND SDL2_LIBS $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
+  endif()
+
+  target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBS})
+
+  include(GNUInstallDirs)
+  install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBS})
-
-include(GNUInstallDirs)
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

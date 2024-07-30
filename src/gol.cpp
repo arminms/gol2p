@@ -26,20 +26,19 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-#include <SDL_ttf.h>
 
 #ifdef __EMSCRIPTEN__
 #   include <emscripten.h>
+#   include <SDL2/SDL_ttf.h>
 #else
+#   include <SDL_ttf.h>
 #   include <cmrc/cmrc.hpp>
     CMRC_DECLARE(gol2p);
 #endif // __EMSCRIPTEN__
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
-const int CELL_SIZE = 3;
-const int ROWS = WINDOW_HEIGHT / CELL_SIZE;
-const int COLS = WINDOW_WIDTH / CELL_SIZE;
+const size_t WINDOW_WIDTH = 800;
+const size_t WINDOW_HEIGHT = 600;
+const size_t CELL_SIZE = 3;
 
 struct cellular_automaton_grid
 {   cellular_automaton_grid(size_t rows, size_t cols)
@@ -119,8 +118,10 @@ struct rendering_context
     ,   grid_(nullptr)
     {   SDL_Init(SDL_INIT_VIDEO);
         TTF_Init();
+        std::string title = "John Conway's Game of Life - v1.1 - ";
+        title += SDL_GetPlatform();
         window_ = SDL_CreateWindow
-        (   "John Conway's Game of Life"
+        (   title.c_str()
         ,   SDL_WINDOWPOS_UNDEFINED
         ,   SDL_WINDOWPOS_UNDEFINED
         ,   width_
@@ -238,8 +239,7 @@ int main(int argc, char* args[])
 
     SDL_DisplayMode dm;
     SDL_GetCurrentDisplayMode(0, &dm);
-    std::cout << "John Conway's Game of Life v1.1\n"
-              << "Copyright © 2024 Armin Sobhani\n"
+    std::cout << "Copyright (C) 2024 Armin Sobhani\n"
               << "Display size: " << dm.w << "x" << dm.h << "\n"
               << "Window size:  " << WINDOW_WIDTH << "x" << WINDOW_HEIGHT
               << std::endl;

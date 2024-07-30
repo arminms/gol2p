@@ -13,7 +13,8 @@ You need [CMake](https://cmake.org/) version 3.19 or higher:
 cmake -S . -B build && cmake --build build && cmake --install build
 ```
 ### Browser (WebAssembly)
-You need [Emscripten](https://emscripten.org/):
+You need [emsdk](https://emscripten.org/) 3.1.63 or higher.
+#### Manually
 ```bash
 em++ src/gol.cpp -o index.html --shell-file src/template.html --preload-file src/font.ttf --use-port=sdl2 --use-port=sdl2_ttf -s ALLOW_MEMORY_GROWTH
 ```
@@ -21,3 +22,10 @@ And for running:
 ```bash
 emrun index.html
 ```
+#### Using CMake
+```
+emcmake cmake -S . -B build-web && cmake --build build-web
+```
+And for running
+```
+emrun build-web/src/gol2p.html

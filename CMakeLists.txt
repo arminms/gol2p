@@ -32,8 +32,10 @@ project(
   DESCRIPTION "John Conway's Game of Life for SDL2/Wasm"
 )
 
-include(FetchContent)
-include(cmake/CMakeRC.cmake)
-include(CheckLibraryExists)
+if (NOT EMSCRIPTEN)
+  include(FetchContent)
+  include(cmake/CMakeRC.cmake)
+  include(CheckLibraryExists)
+endif()
 
 add_subdirectory(src)
