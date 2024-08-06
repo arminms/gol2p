@@ -24,7 +24,7 @@ jobs:
     - name: Build
       run: |
         mkdir -p public
-        em++ src/gol.cpp -o public/index.html --shell-file src/template.html \
+        em++ -O3 src/gol.cpp -o public/index.html --shell-file src/template.html \
         --preload-file src/font.ttf --use-port=sdl2 --use-port=sdl2_ttf \
         -s ALLOW_MEMORY_GROWTH
 
