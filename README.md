@@ -16,7 +16,7 @@ cmake -S . -B build && cmake --build build && cmake --install build
 You need [emsdk](https://emscripten.org/) 3.1.63 or higher.
 #### Manually
 ```bash
-em++ src/gol.cpp -o index.html --shell-file src/template.html --preload-file src/font.ttf --use-port=sdl2 --use-port=sdl2_ttf -s ALLOW_MEMORY_GROWTH
+em++ -O3 src/gol.cpp -o index.html --shell-file src/template.html --preload-file src/font.ttf --use-port=sdl2 --use-port=sdl2_ttf -s ALLOW_MEMORY_GROWTH
 ```
 And for running:
 ```bash
