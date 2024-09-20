@@ -29,3 +29,9 @@ emcmake cmake -S . -B build-web && cmake --build build-web
 And for running
 ```
 emrun build-web/src/gol2p.html
+```
+
+## YouTube Video
+There is a recorded video about `WebAssembly` in general and `gol2p` on [SHARCNET YouTube Channel](https://youtube.sharcnet.ca):
+
+* [The Emergence of WebAssembly (Wasm) in Scientific Computing](https://youtu.be/c4MZPuLog28)
